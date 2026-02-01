@@ -4,7 +4,7 @@ namespace App\View\Components;
 
 use Illuminate\View\Component;
 
-class authsessionstatus extends Component
+class AuthSessionStatus extends Component
 {
     public $status;
 
@@ -13,9 +13,9 @@ class authsessionstatus extends Component
      *
      * @return void
      */
-    public function __construct($status='')
+    public function __construct($status = '')
     {
-       $this -> status = $status; //
+        $this->status = $status; //
     }
 
     /**

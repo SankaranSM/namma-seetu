@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  app:
+    image: namma-seetu-app
+    container_name: namma_seetu_app
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+    expose:
+      - "9000"
+
+  web:
+    image: nginx:alpine
+    container_name: namma_seetu_web
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./public:/var/www/public
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app

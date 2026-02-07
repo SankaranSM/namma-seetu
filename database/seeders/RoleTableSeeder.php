@@ -20,7 +20,7 @@ class RoleTableSeeder extends Seeder
                 'name' => 'admin',
                 'title' => 'Admin',
                 'status' => 1,
-                'permissions' => ['role','role-add', 'role-list', 'permission', 'permission-add', 'permission-list']
+                'permissions' => ['role', 'role-add', 'role-list', 'permission', 'permission-add', 'permission-list']
             ],
             [
                 'name' => 'demo_admin',
@@ -36,11 +36,18 @@ class RoleTableSeeder extends Seeder
             ]
         ];
 
-        foreach ($roles as $key => $value) {
-            $permission = $value['permissions'];
+        foreach ($roles as $value) {
+            $permissions = $value['permissions'];
             unset($value['permissions']);
-            $role = Role::create($value);
-            $role->givePermissionTo($permission);
+
+            $role = Role::updateOrCreate(
+                ['name' => $value['name']],
+                $value
+            );
+
+            if (!empty($permissions)) {
+                $role->syncPermissions($permissions);
+            }
         }
     }
 }

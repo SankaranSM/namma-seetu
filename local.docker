@@ -1,13 +1,12 @@
-FROM php:8.2-fpm
+FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
     git unzip zip curl \
     libpng-dev libjpeg-dev libfreetype6-dev \
     libonig-dev libxml2-dev \
-    libpq-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
-        pdo_pgsql \
+        pdo_mysql \
         mbstring \
         bcmath \
         gd \
@@ -15,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-WORKDIR /var/www
+WORKDIR /app
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
@@ -24,4 +23,6 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["php-fpm"]
+EXPOSE 10000
+
+CMD php -S 0.0.0.0:10000 -t public

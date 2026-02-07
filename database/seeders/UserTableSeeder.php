@@ -49,9 +49,20 @@ class UserTableSeeder extends Seeder
                 'status' => 'inactive'
             ]
         ];
-        foreach ($users as $key => $value) {
-            $user = User::create($value);
-            $user->assignRole($value['user_type']);
+
+        foreach ($users as $value) {
+            $roleName = $value['user_type'];
+
+            // Create or update user by email
+            $user = User::updateOrCreate(
+                ['email' => $value['email']], // unique identifier
+                $value
+            );
+
+            // Assign role safely (no duplicates)
+            if (!$user->hasRole($roleName)) {
+                $user->assignRole($roleName);
+            }
         }
     }
 }

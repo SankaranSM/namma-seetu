@@ -24,4 +24,4 @@ COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["php-fpm"]
+CMD ["php", "-S", "0.0.0.0:10000", "-t", "public"]
